@@ -1,2 +1,2 @@
 # STRNG
-Statistical test for random number generators
+Statistical tests for random number generators
