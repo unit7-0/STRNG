@@ -149,6 +149,8 @@ public class ACSTest {
             }
         }
         
+        // сделать проверку по хи-квадрат
+        
         for (int i = 0; i < sets.size(); ++i) {
             final Set<Integer> set = sets.get(i);
             logger.debug("size of [ {} ] set: {}, and probablity: {}", i, set.size(), (double) set.size() / g.power());
