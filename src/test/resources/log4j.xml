@@ -9,6 +9,14 @@
 		</layout>
 	</appender>
 	
+	<appender name="file" class="org.apache.log4j.FileAppender">
+		<param name="file" value="/home/unit7/log.txt" />
+		<param name="append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %5p %t %c{1}:%L %M - %m%n" />
+		</layout>
+	</appender>
+	
 	<root>
 		<priority value="all" />
 		<appender-ref ref="console" />

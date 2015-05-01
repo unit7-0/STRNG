@@ -7,16 +7,11 @@
 
 package com.unit7.study.diplom.acs;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,10 +19,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
 import com.unit7.study.diplom.bookstack.base.Generator;
 import com.unit7.study.diplom.bookstack.base.IntSEGenerator;
-import com.unit7.study.diplom.bookstack.base.SEGenerator;
 
 /**
  * @author unit7
@@ -39,131 +33,175 @@ public class ACSTest {
     @Test
     public void testMethod() {
         final long n = (long) Math.sqrt(g.power());     // размер выборки
-        final long m = (long) (n * 0.2);                // размер обучающей выборки
-        final long rem = n - m;                         // размер тестовой выборки
+        final long m = (long) (n * 0.3);
+        final long k = m;
+        final long rem = n - m - k;
         
-        logger.debug("Size of selection: {}", n);
-        logger.debug("Size of study selection: {}", m);
-        logger.debug("Size of test selection: {}", rem);
+        logger.debug("Selection count: {}, m: {}, k: {}, testing selection: {}", n, m, k, rem);
         
-        final Map<Integer, Integer> freq = new HashMap<>();
+        final SortedSet<Long> firstSet = new TreeSet<>();
         
-        // обучающая выборка
         for (int i = 0; i < m; ++i) {
-            final Integer next = g.next().intValue();
-            if (freq.containsKey(next))
-                freq.put(next, freq.get(next) + 1);
-            else
-                freq.put(next, 1);
+            final int val = g.next().intValue();
+            // make all numbers positive
+            firstSet.add((long) val - (long) Integer.MIN_VALUE);
         }
         
-        final long otherSetSize = g.power() - freq.size();
+        logger.debug("First set after selection: {}", firstSet);
+        logger.debug("Size: {}", firstSet.size());
         
-        logger.debug("Generator power: {}", g.power());
-        logger.debug("other set size: {}", otherSetSize);
-        logger.debug("Frequences set: {}", freq);
+        int r = findDistance(firstSet);
         
-        // разбиваем на подмножества
-        final int defaultMinDist = (int) (m * 0.05);
-        final List<Set<Integer>> sets = new ArrayList<>();
+        logger.debug("Firstly finded distance: {}", r);
+        logger.debug("Process first set...");
         
-        logger.debug("Default minimum distance between elements: {}", defaultMinDist);
+        // should b1 > r
         
-        ArrayList<Map.Entry<Integer, Integer>> freqList = Lists.newArrayList(freq.entrySet());
+        while (Math.abs(firstSet.first()) <= r) {
+            logger.debug("Remove first element: {}", firstSet.first());
+            firstSet.remove(firstSet.first());
+        }
         
-        // сортируем частоты
-        Collections.sort(freqList, new Comparator<Map.Entry<Integer, Integer>>() {
-            @Override
-            public int compare(Entry<Integer, Integer> o1, Entry<Integer, Integer> o2) {
-                return o1.getValue().compareTo(o2.getValue());
-            }
-        });
+        logger.debug("After first condition preparing: {}", firstSet);
         
-        logger.debug("Sorted frequencies: {}", freqList);
+        final int newDist = normalizeSet(firstSet, r);
         
-        int lastFreq = 0; // последняя встреченная частота
+        logger.debug("Newly finded distance: {}", newDist);
+        logger.debug("After full first set normalization: {}", firstSet);
+        logger.debug("Size: {}", firstSet.size());
         
-        // хранит количество элементов + сами элементы
-        Set<Integer> curSet = new HashSet<>();
-        for (int i = 0; i < freqList.size(); ++i) {
-            final Map.Entry<Integer, Integer> entry = freqList.get(i);
-            final int curFreq = entry.getValue();
-            if (curFreq - lastFreq <= defaultMinDist) {
-                lastFreq = curFreq;
-                curSet.add(entry.getKey());                // добавляем очередной встреченный символ к множеству с похожей частотой встречаемости
-            } else {
-                if (!curSet.isEmpty()) {
-                    sets.add(curSet);
-                }
-                
-                curSet = new HashSet<>();
-                curSet.add(entry.getKey());
-                lastFreq = curFreq;
+        // stage 2
+        
+        final Set<Long> distances = new HashSet<>();
+        
+        for (int i = 0; i < k; ++i) {
+            final long next = g.next().intValue();
+            final long dist = findMinDist(firstSet, next);
+            if (dist != -1) {
+                if (dist < r)
+                    distances.add(dist);
             }
         }
         
-        if (!curSet.isEmpty())
-            sets.add(curSet);
+        logger.debug("Finded distances: {}", distances);
         
-        logger.debug("Builded sets: {}", sets);
+        // stage 3
         
-        // сортируем так, чтобы множества с большим количеством элементов находилось ближе к началу списка
-        Collections.sort(sets, new Comparator<Set<Integer>>() {
-
-            @Override
-            public int compare(Set<Integer> o1, Set<Integer> o2) {
-                return Integer.valueOf(o2.size()).compareTo(o2.size());
-            }
-        });
-        
-        logger.debug("Builded sets after sort: {}", sets);
-        
-        // прогоняем тестовую выборку
-        
-        Map<Integer, Integer> countMap = new TreeMap<>();
-        
-        int otherSet = 0;
+        long freq = 0;
         
         for (int i = 0; i < rem; ++i) {
-            final Integer next = g.next().intValue();
-            //logger.debug("next value: {}", next);
-            // ищем в каком множестве наш символ
-            boolean finded = false;
-            for (int j = 0; j < sets.size(); ++j) {
-                final Set<Integer> set = sets.get(j);
-                if (set.contains(next)) {
-                    finded = true;
-                    if (countMap.containsKey(j)) {
-                        countMap.put(j, countMap.get(j) + 1);
-                    } else {
-                        countMap.put(j, 1);
-                    }
-                    
-                    break;
+            final long next = g.next();
+            final long minDist = findMinDist(firstSet, next);
+            
+            if (minDist != -1) {
+                if (distances.contains(minDist)) {
+                    freq += 1;
+                }
+            }
+        }
+        
+        logger.debug("Result frequency: {}", freq);
+        
+        final double p = 2.0 * firstSet.size() * distances.size() / g.power();
+        
+        logger.debug("Probablity: {}", p);
+        
+        final double np = rem * p;
+        final double np2 = rem * (1 - p);
+        
+        final double x2 = (freq - np) * (freq - np) / np + (rem - freq - np2) * (rem - freq - np2) / np2;
+        
+        logger.debug("x2: {}", x2);
+    }
+    
+    private long findMinDist(SortedSet<Long> set, long val) {
+        long result = Long.MAX_VALUE;
+        
+        // TODO make binary search
+        
+        for (Long cur : set) {
+            final long dist = Math.abs(cur - val);
+            if (dist < result) {
+                result = dist;
+            } else {
+                // дистанция только стала больше, т.к. числа упорядочены, дальше идти смысла нет
+                break;
+            }
+        }
+        
+        if (result == Long.MAX_VALUE)
+            return -1;
+        
+        return result;
+    }
+    
+    private int normalizeSet(SortedSet<Long> set, int r) {
+        int r2 = 2 * r;
+        int newDist = r;
+        while (true) {
+            boolean finished = true;
+            final Iterator<Long> it = set.iterator();
+            long prev = it.next();
+            while (it.hasNext() && finished) {
+                long cur = it.next();
+                int dist = (int) (cur - prev);
+                if (dist >= r2) {
+                    removeWithMinDist(set);
+                    newDist = findDistance(set);
+                    r2 = newDist * 2;
+                    logger.debug("During normalizing newly distance finded: {}", newDist);
+                    finished = false;
                 }
             }
             
-            if (!finded) {
-                // в наших множествах нет, значит элемент из другого множества, добавляем ему статистику
-                otherSet += 1;
+            if (finished) {
+                break;
             }
         }
         
-        for (int i = 0; i < sets.size(); ++i) {
-            final Set<Integer> set = sets.get(i);
-            logger.debug("size of [ {} ] set: {}, and probablity: {}", i, set.size(), (double) set.size() / g.power());
+        return newDist;
+    }
+    
+    private void removeWithMinDist(SortedSet<Long> set) {
+        logger.debug("Remove element from set");
+        
+        Preconditions.checkArgument(!set.isEmpty(), "set should be not empty");
+        
+        int minDist = Integer.MAX_VALUE;
+        final Iterator<Long> it = set.iterator();
+        Long e = it.next();
+        long prev = e;
+        while (it.hasNext()) {
+            long cur = it.next();
+            int dist = (int) (cur - prev);
+            if (dist < minDist) {
+                minDist = dist;
+                if (it.hasNext()) {
+                    e = cur;
+                } else {
+                    e = prev;
+                }
+            }
         }
         
-        logger.debug("And otherSet probablity: {}", (double) otherSetSize / g.power());
+        logger.debug("Element to remove from set: {}", e);
         
-        logger.debug("After counting. otherSet: {}, countMap: {}", otherSet, countMap);
+        set.remove(e);
+    }
+    
+    private int findDistance(SortedSet<Long> set) {
+        long result = 0;
         
-        logger.debug("Real probablities:");
-        for (Integer key : countMap.keySet()) {
-            logger.debug("P for set [ {} ]: {}", key, (double) countMap.get(key) / rem);
+        final Iterator<Long> it = set.iterator();
+        long prev = it.next();
+        while (it.hasNext()) {
+            long cur = it.next();
+            int dist = (int) (cur - prev);
+            result += dist;            
+            prev = cur;
         }
         
-        logger.debug("For other sets: {}", (double) otherSet / rem);
+        return (int) (result / (set.size() - 1));
     }
     
     @After
