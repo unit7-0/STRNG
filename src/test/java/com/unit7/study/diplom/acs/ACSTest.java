@@ -33,12 +33,13 @@ public class ACSTest {
     @Test
     public void testMethod() {
         final long n = (long) Math.sqrt(g.power());     // размер выборки
-        final long m = (long) (n * 0.3);
-        final long k = m;
-        final long rem = n - m - k;
+        final long m = (long) (n * 0.3);                // размер первой обучающей выборки
+        final long k = m;                               // размер второй обучающей выборки
+        final long rem = n - m - k;                     // размер тестовой выборки
         
         logger.debug("Selection count: {}, m: {}, k: {}, testing selection: {}", n, m, k, rem);
         
+        // множество встреченных символов
         final SortedSet<Long> firstSet = new TreeSet<>();
         
         for (int i = 0; i < m; ++i) {
@@ -50,6 +51,7 @@ public class ACSTest {
         logger.debug("First set after selection: {}", firstSet);
         logger.debug("Size: {}", firstSet.size());
         
+        // среднее растояние между символами
         int r = findDistance(firstSet);
         
         logger.debug("Firstly finded distance: {}", r);
@@ -64,6 +66,7 @@ public class ACSTest {
         
         logger.debug("After first condition preparing: {}", firstSet);
         
+        // прорежаем выборки и находим новое среднее растояние между символами
         final int newDist = normalizeSet(firstSet, r);
         
         logger.debug("Newly finded distance: {}", newDist);
@@ -72,6 +75,7 @@ public class ACSTest {
         
         // stage 2
         
+        // множество растояний до ближайшего символа в первой выборке из второй обучающей
         final Set<Long> distances = new HashSet<>();
         
         for (int i = 0; i < k; ++i) {
@@ -89,6 +93,9 @@ public class ACSTest {
         
         long freq = 0;
         
+        // прогон тестовой выборки
+        // если растояние до ближайшего символа в первом множестве находится во втором множестве
+        // увеличиваем частоту встреченных символов
         for (int i = 0; i < rem; ++i) {
             final long next = g.next();
             final long minDist = findMinDist(firstSet, next);
@@ -102,12 +109,16 @@ public class ACSTest {
         
         logger.debug("Result frequency: {}", freq);
         
+        // вероятность выпадания символа из первых двух выборок
+        
         final double p = 2.0 * firstSet.size() * distances.size() / g.power();
         
         logger.debug("Probablity: {}", p);
         
         final double np = rem * p;
         final double np2 = rem * (1 - p);
+        
+        // проверяем про критерию хи квадрат
         
         final double x2 = (freq - np) * (freq - np) / np + (rem - freq - np2) * (rem - freq - np2) / np2;
         
@@ -135,6 +146,9 @@ public class ACSTest {
         return result;
     }
     
+    /**
+     * Проредить выборку для выполнения условий
+     */
     private int normalizeSet(SortedSet<Long> set, int r) {
         int r2 = 2 * r;
         int newDist = r;
@@ -147,11 +161,17 @@ public class ACSTest {
                 int dist = (int) (cur - prev);
                 if (dist >= r2) {
                     removeWithMinDist(set);
+                    
+                    // TODO новое растояние можно искать за O(1) зная какой символ удалили - в середине или с края
+                    
                     newDist = findDistance(set);
                     r2 = newDist * 2;
                     logger.debug("During normalizing newly distance finded: {}", newDist);
                     finished = false;
                 }
+                
+                // TODO после удаления символа можно продолжить считать с того же места либо откатиться назад, но на
+                // меньшее растояние чем сейчас - нужно знать позицию удаленного символа
             }
             
             if (finished) {
@@ -162,6 +182,10 @@ public class ACSTest {
         return newDist;
     }
     
+    /**
+     * Удалить из множества элемент с минимальной дистанцией до другого
+     * TODO модифицировать на удаление любого элемента без изменения конечного растояния
+     */
     private void removeWithMinDist(SortedSet<Long> set) {
         logger.debug("Remove element from set");
         
@@ -189,6 +213,9 @@ public class ACSTest {
         set.remove(e);
     }
     
+    /**
+     * Найти среднее растояние между символами в множестве
+     */
     private int findDistance(SortedSet<Long> set) {
         long result = 0;
         
