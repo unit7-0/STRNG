@@ -114,7 +114,7 @@ public class ACSTest {
         // увеличиваем частоту встреченных символов
         
         // (n - k - m) = 5 * s / (2 |B| |C|)
-        final long remain = (5 * g.power() / (2 * firstSet.size() * distances.size())) - k - m;
+        final long remain = (5 * g.power() / (2 * firstSet.size() * distances.size())) + k + m;
         
         logger.info("Real testing selection size: {}", remain);
         
@@ -339,7 +339,7 @@ public class ACSTest {
     
     @Before
     public void init() {
-        g = new SequenceIntGenerator();
+        g = new IntSEGenerator(true);
         
         startTime = System.currentTimeMillis();
     }
