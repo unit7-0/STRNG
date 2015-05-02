@@ -44,7 +44,7 @@ public class ACSTest {
         final SortedSet<Long> firstSet = new TreeSet<>();
         
         for (int i = 0; i < m; ++i) {
-            final int val = i;//g.next().intValue();
+            final int val = g.next().intValue();
             // make all numbers positive
             firstSet.add((long) val - (long) Integer.MIN_VALUE);
         }
@@ -219,7 +219,7 @@ public class ACSTest {
             long pprev = it.next();
             long prev = it.next();
             
-            double calced = distanceSum / (set.size() - 2);
+            double calced = (double) distanceSum / (set.size() - 2);
             double doubled = calced * 2;
             
             boolean removed = false;
