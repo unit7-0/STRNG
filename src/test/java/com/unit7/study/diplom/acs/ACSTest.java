@@ -21,8 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.unit7.study.diplom.bookstack.base.Generator;
-import com.unit7.study.diplom.bookstack.base.IntSEGenerator;
+import com.unit7.study.diplom.base.Generator;
+import com.unit7.study.diplom.base.IntSEGenerator;
+import com.unit7.study.diplom.base.SequenceIntGenerator;
 
 /**
  * @author unit7
@@ -33,9 +34,9 @@ public class ACSTest {
     
     @Test
     public void testMethod() {
-        final long n = (long) Math.sqrt(g.power());     // размер выборки
-        final long m = (long) (n * 0.1);                // размер первой обучающей выборки
-        final long k = m;                               // размер второй обучающей выборки
+        final long n = (long) Math.cbrt(g.power());     // размер выборки
+        final long m = (long) (n * 0.4);                // размер первой обучающей выборки
+        final long k = (long) (m * 0.7);                // размер второй обучающей выборки
         final long rem = n - m - k;                     // размер тестовой выборки
         
         logger.info("Selection count: {}, m: {}, k: {}, testing selection: {}", n, m, k, rem);
@@ -99,6 +100,10 @@ public class ACSTest {
         }
         
         logger.debug("Finded distances: {}", distances);
+        logger.info("Distances size: {}", distances.size());
+        
+        if (firstSet.isEmpty() || distances.isEmpty())
+            throw new OperationImpossibleException("One of sets is empty: ");
         
         // stage 3
         
@@ -107,7 +112,13 @@ public class ACSTest {
         // прогон тестовой выборки
         // если растояние до ближайшего символа в первом множестве находится во втором множестве
         // увеличиваем частоту встреченных символов
-        for (int i = 0; i < rem; ++i) {
+        
+        // (n - k - m) = 5 * s / (2 |B| |C|)
+        final long remain = (5 * g.power() / (2 * firstSet.size() * distances.size())) - k - m;
+        
+        logger.info("Real testing selection size: {}", remain);
+        
+        for (int i = 0; i < remain; ++i) {
             final long next = g.next().longValue() - (long) Integer.MIN_VALUE;
             final long minDist = findMinDist(firstSet, next);
             
@@ -135,7 +146,7 @@ public class ACSTest {
         
         logger.info("x2: {}", x2);
         
-        final double hi2 = 0.01579; // 0.9
+        final double hi2 = 0.00004; // 0.995
         
         Assert.assertTrue("", hi2 >= (x2 - 0.000001));
     }
@@ -328,7 +339,7 @@ public class ACSTest {
     
     @Before
     public void init() {
-        g = new IntSEGenerator(true);
+        g = new SequenceIntGenerator();
         
         startTime = System.currentTimeMillis();
     }

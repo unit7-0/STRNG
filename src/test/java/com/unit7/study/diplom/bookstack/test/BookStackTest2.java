@@ -16,9 +16,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.unit7.study.diplom.base.Generator;
+import com.unit7.study.diplom.base.SequenceIntGenerator;
 import com.unit7.study.diplom.bookstack.base.BSSet;
-import com.unit7.study.diplom.bookstack.base.Generator;
-import com.unit7.study.diplom.bookstack.base.IntSEGenerator;
 
 /**
  * @author unit7
@@ -41,7 +41,7 @@ public class BookStackTest2 {
             firstSet.add(i);
         }
         
-        log.debug("selectionCount: {}, firstSetSize: {}, secondSetSize: {}", SELECTION_COUNT, firstSetSize, secondSetSize);
+        log.info("selectionCount: {}, firstSetSize: {}, secondSetSize: {}", SELECTION_COUNT, firstSetSize, secondSetSize);
 //        log.debug("firstSet: {}", firstSet);
         
         // количество элементов первого множества, встретившихся в выборке
@@ -68,8 +68,8 @@ public class BookStackTest2 {
         final double x2 = sqr(n1 - np1) / (np1) + sqr(n2 - np2) / (np2);
         final double hi2 = getHi2(1, 1 - 1.0 / generator.power());
         
-        log.debug("n2={}, p1={}, p2={}, np1={}, np2={}", n2, p1, p2, np1, np2);
-        log.debug("x2={}, hi2={}", x2, hi2);
+        log.info("n2={}, p1={}, p2={}, np1={}, np2={}", n2, p1, p2, np1, np2);
+        log.info("x2={}, hi2={}", x2, hi2);
         
         Assert.assertTrue(hi2 >= x2);
     }
@@ -93,7 +93,7 @@ public class BookStackTest2 {
         final double freeMemoryAtEnd = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024.0;
         final double memoryUsage = freeMemoryAtStart - freeMemoryAtEnd;
         
-        log.debug("time elapsed: {} ms, memoryAtStart: {} KB, memoryAtEnd: {} KB, memoryUsage: {} KB", elapsed, freeMemoryAtStart, freeMemoryAtEnd, memoryUsage);
+        log.info("time elapsed: {} ms, memoryAtStart: {} KB, memoryAtEnd: {} KB, memoryUsage: {} KB", elapsed, freeMemoryAtStart, freeMemoryAtEnd, memoryUsage);
     }
     
     @Before
@@ -103,14 +103,14 @@ public class BookStackTest2 {
         start = System.currentTimeMillis();
         freeMemoryAtStart = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024.0;
         
-        generator = new IntSEGenerator(true);
+        generator = new SequenceIntGenerator();
     }
     
     private long start;
     private double freeMemoryAtStart;
     
     // размер выборки
-    private static final int SELECTION_COUNT = 10000000;
+    private static final int SELECTION_COUNT = 1000000;
     
     private Generator<Integer> generator;
 }

@@ -10,6 +10,7 @@ package com.unit7.study.diplom.bookstack.base;
 import java.util.Arrays;
 
 import com.google.common.base.Objects;
+import com.unit7.study.diplom.base.Generator;
 
 /**
  * @author unit7
