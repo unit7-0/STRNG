@@ -34,7 +34,7 @@ public class ACSTest {
     @Test
     public void testMethod() {
         final long n = (long) Math.sqrt(g.power());     // размер выборки
-        final long m = (long) (n * 0.3);                // размер первой обучающей выборки
+        final long m = (long) (n * 0.1);                // размер первой обучающей выборки
         final long k = m;                               // размер второй обучающей выборки
         final long rem = n - m - k;                     // размер тестовой выборки
         
@@ -44,9 +44,9 @@ public class ACSTest {
         final SortedSet<Long> firstSet = new TreeSet<>();
         
         for (int i = 0; i < m; ++i) {
-            final int val = g.next().intValue();
+            final long val = g.next().longValue() - (long) Integer.MIN_VALUE;
             // make all numbers positive
-            firstSet.add((long) val - (long) Integer.MIN_VALUE);
+            firstSet.add(val);
         }
         
         logger.debug("First set after selection: {}", firstSet);
@@ -90,7 +90,7 @@ public class ACSTest {
         final Set<Long> distances = new HashSet<>();
         
         for (int i = 0; i < k; ++i) {
-            final long next = g.next().intValue();
+            final long next = g.next().longValue() - (long) Integer.MIN_VALUE;
             final long dist = findMinDist(firstSet, next);
             if (dist != -1) {
                 if (dist < r)
@@ -108,7 +108,7 @@ public class ACSTest {
         // если растояние до ближайшего символа в первом множестве находится во втором множестве
         // увеличиваем частоту встреченных символов
         for (int i = 0; i < rem; ++i) {
-            final long next = g.next();
+            final long next = g.next().longValue() - (long) Integer.MIN_VALUE;
             final long minDist = findMinDist(firstSet, next);
             
             if (minDist != -1) {
@@ -181,6 +181,8 @@ public class ACSTest {
                     finished = false;
                     break;
                 }
+                
+                prev = cur;
                 
                 // TODO после удаления символа можно продолжить считать с того же места либо откатиться назад, но на
                 // меньшее растояние чем сейчас - нужно знать позицию удаленного символа
