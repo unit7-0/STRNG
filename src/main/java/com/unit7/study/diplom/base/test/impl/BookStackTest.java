@@ -5,9 +5,9 @@
  * Author:	Zajcev V.
  */
 
-package com.unit7.study.diplom.bookstack.base.test.impl;
+package com.unit7.study.diplom.base.test.impl;
 
-import com.unit7.study.diplom.bookstack.base.test.TestAlgorithm;
+import com.unit7.study.diplom.base.test.TestAlgorithm;
 
 /**
  * Алгоритм тестирования стопка книг

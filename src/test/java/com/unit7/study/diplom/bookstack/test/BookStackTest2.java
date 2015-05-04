@@ -16,9 +16,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.unit7.study.diplom.base.BSSet;
 import com.unit7.study.diplom.base.generator.Generator;
 import com.unit7.study.diplom.base.generator.impl.SequenceIntGenerator;
-import com.unit7.study.diplom.bookstack.base.BSSet;
 
 /**
  * @author unit7

@@ -12,7 +12,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.unit7.study.diplom.bookstack.base.BSSet;
+import com.unit7.study.diplom.base.BSSet;
 
 /**
  * @author unit7

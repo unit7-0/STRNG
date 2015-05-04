@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.unit7.study.diplom.base.generator.Generator;
 import com.unit7.study.diplom.base.generator.impl.IntSEGenerator;
-import com.unit7.study.diplom.bookstack.base.old.BookStackTestSettings;
+import com.unit7.study.diplom.base.old.BookStackTestSettings;
 
 /**
  * @author unit7

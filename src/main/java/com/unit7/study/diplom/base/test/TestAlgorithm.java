@@ -5,7 +5,7 @@
  * Author:	Zajcev V.
  */
 
-package com.unit7.study.diplom.bookstack.base.test;
+package com.unit7.study.diplom.base.test;
 
 /**
  * Интерфейс алгоритма тестирования последовательностей на определение их случайности.

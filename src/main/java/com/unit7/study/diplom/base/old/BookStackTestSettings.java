@@ -5,7 +5,7 @@
  * Author:	Zajcev V.
  */
 
-package com.unit7.study.diplom.bookstack.base.old;
+package com.unit7.study.diplom.base.old;
 
 import java.util.Arrays;
 
