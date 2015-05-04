@@ -5,7 +5,7 @@
  * Author:	Zajcev V.
  */
 
-package com.unit7.study.diplom.base;
+package com.unit7.study.diplom.base.generator;
 
 import java.util.Set;
 
@@ -23,8 +23,15 @@ public interface Generator<T> {
     
     /**
      * @return мощность множества, порождаемого генератором
+     * Method has been deprecated. See com.unit7.study.diplom.base.Generator.bitCount
      */
+    @Deprecated
     long power();
+    
+    /**
+     * Количество бит, выделяемое для генерации одной последовательности
+     */
+    short bitCount();
     
     /**
      * @return множество, порождаемое генератором

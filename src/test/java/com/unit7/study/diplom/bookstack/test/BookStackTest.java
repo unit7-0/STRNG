@@ -10,17 +10,15 @@ package com.unit7.study.diplom.bookstack.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.math3.distribution.ChiSquaredDistribution;
-import org.apache.commons.math3.special.Gamma;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unit7.study.diplom.bookstack.base.BookStackTestSettings;
-import com.unit7.study.diplom.bookstack.base.Generator;
-import com.unit7.study.diplom.bookstack.base.IntSEGenerator;
+import com.unit7.study.diplom.base.generator.Generator;
+import com.unit7.study.diplom.base.generator.impl.IntSEGenerator;
+import com.unit7.study.diplom.bookstack.base.old.BookStackTestSettings;
 
 /**
  * @author unit7

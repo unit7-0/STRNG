@@ -1,45 +1,39 @@
 /**
- * Date:	23 февр. 2015 г.
- * File:	IntSEGenerator.java
+ * Date:	02 мая 2015 г.
+ * File:	SequenceGenerator.java
  *
  * Author:	Zajcev V.
  */
 
-package com.unit7.study.diplom.base;
+package com.unit7.study.diplom.base.generator.impl;
 
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
 import com.google.common.collect.ImmutableSet;
+import com.unit7.study.diplom.base.generator.Generator;
 
 /**
+ * Генератор последовательности целых чисел 2<sup>32</sup> бит
+ * Начинает с нуля с шагом 1 и ходит по кругу
  * @author unit7
  *
  */
-public class IntSEGenerator implements Generator<Integer> {
+public class SequenceIntGenerator implements Generator<Integer> {
 
-    public IntSEGenerator() {
-        this(false);
-    }
-    
-    public IntSEGenerator(boolean randomize) {
-        if (randomize)
-            generator = new Random(System.currentTimeMillis());
-        else
-            generator = new Random();
+    public SequenceIntGenerator() {
     }
 
     @Override
     public Integer next() {
-        return generator.nextInt();
+        return current++;
     }
-
+    
     @Override
     public long power() {
         return 4294967296L;
     }
-
+    
     @Override
     public Set<Integer> set() {
         if (set.isEmpty()) {
@@ -56,12 +50,20 @@ public class IntSEGenerator implements Generator<Integer> {
         
         return set;
     }
+    
+    
+    
+    @Override
+    public short bitCount() {
+        return 32;
+    }
 
     @Override
     public String toString() {
-        return String.format("IntSEGenerator [generator=%s, set=%s]", generator, set);
+        return String.format("IntSEGenerator [set=%s]", set);
     }
 
-    private Random generator;
+    private int current = 0;
+    
     private Set<Integer> set = new TreeSet<>();
 }

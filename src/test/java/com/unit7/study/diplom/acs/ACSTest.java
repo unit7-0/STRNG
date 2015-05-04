@@ -21,9 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.unit7.study.diplom.base.Generator;
-import com.unit7.study.diplom.base.IntSEGenerator;
-import com.unit7.study.diplom.base.SequenceIntGenerator;
+import com.unit7.study.diplom.base.generator.Generator;
+import com.unit7.study.diplom.base.generator.impl.IntSEGenerator;
 
 /**
  * @author unit7

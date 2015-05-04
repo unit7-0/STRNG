@@ -5,7 +5,7 @@
  * Author:	Zajcev V.
  */
 
-package com.unit7.study.diplom.base;
+package com.unit7.study.diplom.base.generator.impl;
 
 import java.util.Collections;
 import java.util.Random;
@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.google.common.base.Objects;
+import com.unit7.study.diplom.base.generator.Generator;
 
 /**
  * @author unit7
@@ -55,6 +56,11 @@ public class SEGenerator implements Generator<Byte> {
         return set;
     }
     
+    @Override
+    public short bitCount() {
+        return 8;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this).
