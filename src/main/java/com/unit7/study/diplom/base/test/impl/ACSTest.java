@@ -32,37 +32,70 @@ public class ACSTest implements TestAlgorithm {
         this.sequence = sequence;
     }
 
+    /**
+     * Рассчитать размеры выборок для каждой стадии
+     */
     private void calcDimensions() {
-        // TODO
+        sequenceLength = sequence.length;
+        stageOneSize = (int) (sequenceLength * 0.1);
+        stageTwoSize = (int) (stageOneSize * 0.7);
+        stageThreeSize = sequenceLength - stageOneSize - stageTwoSize;
     }
     
     private void executeStageOne() {
-        for (int i = 0; i < m; ++i) {
+        for (int i = 0; i < stageOneSize; ++i) {
             sortedPart.add(sequence[i]);
         }
         
-        // TODO
+        // TODO рассчитать среднее расстояние между значениями и проредить выборку, если нужно
     }
     
     private void executeStageTwo() {
-        for (int i = 0; i < k; ++i) {
-            final int index = m + i;
-            final BitSet next = sequence[i];
+        for (int i = 0; i < stageTwoSize; ++i) {
+            final int index = stageOneSize + i;
+            final BitSet next = sequence[index];
             final BitSet distance = findMinDist(next);
             
             if (distance != null && BIT_SET_COMPARATOR.compare(currentDistance, distance) > 0)
                 distanceSet.add(distance);
         }
-        // TODO
     }
     
     private void executeStageThree() {
-        // TODO
+        for (int i = 0; i < stageThreeSize; ++i) {
+            final int index = i + stageOneSize + stageTwoSize;
+            final BitSet next = sequence[index];
+            final BitSet distance = findMinDist(next);
+            if (distanceSet.contains(distance)) {
+                meetFrequency += 1;
+            }
+        }
     }
     
+    /**
+     * Рассчитать конечное значение x2
+     */
+    private double calcFinalValue() {
+        // TODO
+        return 0;
+    }
+    
+    /**
+     * Найти расстояние до ближайшего значения в словаре
+     * @param value значение для сравнения
+     * @return кратчайшее расстояние
+     */
     private BitSet findMinDist(BitSet value) {
         // TODO
         return null;
+    }
+    
+    /**
+     * Рассчитать значение тестовой выборки
+     * @return
+     */
+    private int calcStageThreeSize() {
+        return (int) (5 * (long) Math.pow(2, bitCount) / (2 * sortedPart.size() * distanceSet.size())) + stageTwoSize + stageOneSize;
     }
     
     @Override
@@ -72,21 +105,31 @@ public class ACSTest implements TestAlgorithm {
         
         executeStageOne();
         executeStageTwo();
-        executeStageThree();        
         
-        return false;
+        stageThreeSize = calcStageThreeSize();
+        
+        executeStageThree();
+        
+        final double x2 = calcFinalValue();
+        
+        return x2 <= 0.00016;
     }
 
-    private int n;
-    private int m;
-    private int k;
+    private int sequenceLength;                 // размер всей тестовой выборки
     
-    private BitSet currentDistance;
-    private SortedSet<BitSet> sortedPart = new TreeSet<>(BIT_SET_COMPARATOR);
-    private Set<BitSet> distanceSet = new HashSet<>();
+    private int stageOneSize;                   // размер выборки для определения первого множества(словаря)
+    private int stageTwoSize;                   // размер выборки для определения множества расстояний
+    private int stageThreeSize;                 // размер тестовой выборки для расчета итоговых значений
     
-    private short bitCount;
-    private BitSet[] sequence;
+    private int meetFrequency;                  // частота встречаемости элементов первого множества
+    
+    private BitSet currentDistance;             // текущее среднее расстояние между значениями в словаре
+    
+    private SortedSet<BitSet> sortedPart = new TreeSet<>(BIT_SET_COMPARATOR);           // словарь
+    private Set<BitSet> distanceSet = new HashSet<>();                                  // множество расстояний
+    
+    private short bitCount;                     // степень двойки мощности словаря
+    private BitSet[] sequence;                  // выборка данных
     
     private static final Comparator<BitSet> BIT_SET_COMPARATOR = new Comparator<BitSet>() {
         @Override
