@@ -64,7 +64,7 @@ public class BookStackTest implements TestAlgorithm {
         final double p1 = BigDecimal.valueOf(n1).divide(setPower).doubleValue();
         final double p2 = BigDecimal.valueOf(n2).divide(setPower).doubleValue();
         
-        logger.debug("Calculated first set matching and probability: [ {}, {}], second set matching and probability: [ {}, {} ]",
+        logger.debug("Calculated first set matching and probability: [ {}, {} ], second set matching and probability: [ {}, {} ]",
                 n1, n2, p1, p2);
         
         final double np1 = selectionCount * p1;
