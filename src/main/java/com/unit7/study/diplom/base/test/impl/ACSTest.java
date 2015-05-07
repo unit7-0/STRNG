@@ -40,14 +40,29 @@ public class ACSTest implements TestAlgorithm {
         for (int i = 0; i < m; ++i) {
             sortedPart.add(sequence[i]);
         }
+        
+        // TODO
     }
     
     private void executeStageTwo() {
+        for (int i = 0; i < k; ++i) {
+            final int index = m + i;
+            final BitSet next = sequence[i];
+            final BitSet distance = findMinDist(next);
+            
+            if (distance != null && BIT_SET_COMPARATOR.compare(currentDistance, distance) > 0)
+                distanceSet.add(distance);
+        }
         // TODO
     }
     
     private void executeStageThree() {
         // TODO
+    }
+    
+    private BitSet findMinDist(BitSet value) {
+        // TODO
+        return null;
     }
     
     @Override
@@ -66,8 +81,9 @@ public class ACSTest implements TestAlgorithm {
     private int m;
     private int k;
     
+    private BitSet currentDistance;
     private SortedSet<BitSet> sortedPart = new TreeSet<>(BIT_SET_COMPARATOR);
-    private Set<Double> distanceSet = new HashSet<>();
+    private Set<BitSet> distanceSet = new HashSet<>();
     
     private short bitCount;
     private BitSet[] sequence;
