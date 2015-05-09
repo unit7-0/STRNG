@@ -31,15 +31,13 @@ import com.unit7.study.diplom.base.test.TestAlgorithm;
  * @author unit7
  *
  */
-public class ACSTest implements TestAlgorithm {
+public class ACSTest extends TestAlgorithm<BitSet> {
     private static final Logger logger = LoggerFactory.getLogger(ACSTest.class);    
 
     public ACSTest(BitSet[] sequence, short bitCount) {
+        super(sequence, bitCount);
         if (sequence == null || sequence.length < 3)
             throw new IllegalArgumentException("sequence should not be null and length should be >= 3");
-        
-        this.bitCount = bitCount;
-        this.sequence = sequence;
     }
 
     /**
@@ -121,6 +119,9 @@ public class ACSTest implements TestAlgorithm {
                 if (!finished)
                     break;
             }
+            
+            if (finished)
+                break;
         }
     }
     
@@ -426,7 +427,7 @@ public class ACSTest implements TestAlgorithm {
         executeStageOne();
         executeStageTwo();
         
-        stageThreeSize = calcStageThreeSize();
+        stageThreeSize = Math.min(calcStageThreeSize(), sequenceLength - stageOneSize - stageTwoSize);
         
         executeStageThree();
         
@@ -450,10 +451,7 @@ public class ACSTest implements TestAlgorithm {
     
     private SortedSet<BitSet> sortedPart = new TreeSet<>(BIT_SET_COMPARATOR);           // словарь
     private Set<BitSet> distanceSet = new HashSet<>();                                  // множество расстояний
-    
-    private short bitCount;                     // степень двойки мощности словаря
-    private BitSet[] sequence;                  // выборка данных
-    
+        
     private static final Comparator<BitSet> BIT_SET_COMPARATOR = new Comparator<BitSet>() {
         @Override
         public int compare(BitSet left, BitSet right) {

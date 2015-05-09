@@ -9,6 +9,7 @@ package com.unit7.study.diplom.base.test.impl;
 
 import java.math.BigDecimal;
 import java.util.BitSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,16 +23,14 @@ import com.unit7.study.diplom.base.test.TestAlgorithm;
  * @author unit7
  *
  */
-public class BookStackTest implements TestAlgorithm {
+public class BookStackTest extends TestAlgorithm<BitSet> {
     private static final Logger logger = LoggerFactory.getLogger(BookStackTest.class);
     
     public BookStackTest(BitSet[] sequence, short bitCount) {
+        super(sequence, bitCount);
         if (sequence == null || sequence.length == 0) {
             throw new IllegalArgumentException("sequence length should be > 0");
         }
-        
-        this.bitCount = bitCount;
-        this.sequence = sequence;
     }
 
     private void prepare() {
@@ -90,10 +89,7 @@ public class BookStackTest implements TestAlgorithm {
         return x2 <= 0.00016;
     }
 
-    private BSSet<BitSet> preparedSet;
-    private BitSet[] sequence;
-
-    private short bitCount;
+    private Set<BitSet> preparedSet;
     
     private int firstSequenceIndex;
 }

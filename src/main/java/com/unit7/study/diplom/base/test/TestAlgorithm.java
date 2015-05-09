@@ -7,12 +7,21 @@
 
 package com.unit7.study.diplom.base.test;
 
+
 /**
  * Интерфейс алгоритма тестирования последовательностей на определение их случайности.
  * 
  * @author unit7
  *
  */
-public interface TestAlgorithm {
-    boolean test();
+public abstract class TestAlgorithm<T> {
+    public TestAlgorithm(T[] sequence, short bitCount) {
+        this.sequence = sequence;
+        this.bitCount = bitCount;
+    }
+    
+    public abstract boolean test();
+    
+    protected short bitCount;                     // степень двойки мощности словаря
+    protected T[] sequence;                  // выборка данных
 }
