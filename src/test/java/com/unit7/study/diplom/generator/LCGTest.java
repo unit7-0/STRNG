@@ -5,7 +5,7 @@
  * Author:	Zajcev V.
  */
 
-package com.unit7.diplom.generator;
+package com.unit7.study.diplom.generator;
 
 import java.util.BitSet;
 

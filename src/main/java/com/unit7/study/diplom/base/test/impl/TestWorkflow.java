@@ -20,7 +20,7 @@ import com.unit7.study.diplom.base.test.TestAlgorithmType;
 import com.unit7.study.diplom.base.test.Workflow;
 
 /**
- * Окржуение теста
+ * Окружение теста
  * 
  * @author unit7
  *
@@ -44,10 +44,10 @@ public class TestWorkflow<T> implements Workflow {
         
         short failedTestCounter = 0;
         
+        @SuppressWarnings("unchecked")
+        final T[] sequence = (T[]) Array.newInstance(BitSet.class, selectionCount);
+        
         for (short i = 0; i < iterations; ++i) {
-            @SuppressWarnings("unchecked")
-            final T[] sequence = (T[]) Array.newInstance(BitSet.class, selectionCount);
-            
             for (int j = 0; j < selectionCount; ++j) {
                 sequence[j] = generator.next();
             }
