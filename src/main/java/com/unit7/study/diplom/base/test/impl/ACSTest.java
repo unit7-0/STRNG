@@ -7,22 +7,31 @@
 
 package com.unit7.study.diplom.base.test.impl;
 
+import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 import com.unit7.study.diplom.base.test.TestAlgorithm;
 
 /**
  * Алгоритм тестирования новый адаптивный хи-квадрат
  * 
+ * TODO использовать BigInteger?
+ * 
  * @author unit7
  *
  */
 public class ACSTest implements TestAlgorithm {
+    private static final Logger logger = LoggerFactory.getLogger(ACSTest.class);    
 
     public ACSTest(BitSet[] sequence, short bitCount) {
         if (sequence == null || sequence.length < 3)
@@ -47,7 +56,45 @@ public class ACSTest implements TestAlgorithm {
             sortedPart.add(sequence[i]);
         }
         
-        // TODO рассчитать среднее расстояние между значениями и проредить выборку, если нужно
+        findAvgDistance();
+        normalizeSortedPart();
+    }
+    
+    private void normalizeSortedPart() {
+        // TODO
+    }
+    
+    /**
+     * Рассчитать среднее расстояние между элементами первого множества
+     */
+    private void findAvgDistance() {
+        currentAmount = new BitSet();
+        
+        final Iterator<BitSet> it = sortedPart.iterator();
+        BitSet prev = it.next();
+        for (; it.hasNext(); ) {
+            final BitSet cur = it.next();
+            final BitSet distance = sub(cur, prev);
+            
+            currentAmount = add(currentAmount, distance);
+            prev = cur;
+        }
+        
+        currentDistance = div(currentAmount, BitSet.valueOf(new long[] { sortedPart.size() - 1 }));
+    }
+    
+    public static void main(String[] args) {
+        final BitSet[] seq = new BitSet[5];
+        final ACSTest test = new ACSTest(seq, (short) 5);
+        
+        BitSet left = new BitSet();
+        BitSet right = new BitSet();
+        
+        left.set(11);
+        
+        right.set(5);
+        
+        logger.info("{} / {} = {}", test.bitSetToString(left), test.bitSetToString(right), test.bitSetToString(test.div(left, right)));
     }
     
     private void executeStageTwo() {
@@ -70,6 +117,133 @@ public class ACSTest implements TestAlgorithm {
                 meetFrequency += 1;
             }
         }
+    }
+    
+    /**
+     * Разделить битовые последовательности left / right
+     * @param left
+     * @param right
+     * @return
+     * 
+     * TODO переписать
+     */
+    private BitSet div(BitSet left, BitSet right) {
+        final BigInteger a = new BigInteger(bitSetToString(left), 2);
+        final BigInteger b = new BigInteger(bitSetToString(right), 2);
+        
+        final BigInteger result = a.divide(b);
+        
+        final BitSet bitSet = new BitSet();
+        for (int i = 0; i < result.bitLength(); ++i) {
+            if (result.testBit(i)) {
+                bitSet.set(i);
+            }
+        }
+        
+        return bitSet;
+    }
+    
+    private String bitSetToString(BitSet bitSet) {
+        final StringBuilder seq = new StringBuilder();
+        final long[] words = bitSet.toLongArray();
+        for (long word : words) {
+            seq.insert(0, Strings.padStart(Long.toBinaryString(word), 63, '0'));
+        }
+        
+        return seq.toString();
+    }
+    
+    /**
+     * Вычислить расстояние между последовательностями
+     * Левая должна быть больше либо равна правой
+     * @param left левая последовательность
+     * @param right права последовательность
+     * @return
+     */
+    private BitSet sub(BitSet left, BitSet right) {
+        final BitSet result = BitSet.valueOf(left.toLongArray());
+        
+        for (int i = 0; i < right.length(); ++i) {
+            if (right.get(i)) {
+                if (result.get(i)) {
+                    result.flip(i);
+                } else {
+                    tookBit(result, i); // занимаем бит
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Сложить две битовые последовательности
+     * @param left
+     * @param right
+     * @return
+     */
+    private BitSet add(BitSet left, BitSet right) {
+        final BitSet result = BitSet.valueOf(left.toLongArray());
+        
+        for (int i = 0; i < right.length(); ++i) {
+            if (right.get(i)) {
+                if (result.get(i)) {
+                    addBit(result, i);
+                } else {
+                    result.flip(i);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Добавить бит к последовательности от текущей позиции
+     * @param bitSet
+     * @param pos
+     */
+    private void addBit(BitSet bitSet, int pos) {
+        int zeroPos = -1;
+        for (int i = pos + 1; i < bitSet.length(); ++i) {
+            if (!bitSet.get(i)) {
+                zeroPos = i;
+                break;
+            }
+        }
+        
+        if (zeroPos == -1) {
+            bitSet.set(bitSet.length());
+            for (int i = bitSet.length() - 2; i >= pos; --i) {
+                bitSet.flip(i);
+            }
+        } else {
+            for (int i = zeroPos; i >= pos; --i) {
+                bitSet.flip(i);
+            }
+        }
+    }
+    
+    /**
+     * Занимает бит в правой части, начиная от текущей позиции
+     * Предполагается, что занять бит всегда возможно
+     * @param bitSet
+     * @param curPos
+     */
+    private void tookBit(BitSet bitSet, int curPos) {
+        int onePos = -1;
+        for (int i = curPos + 1; i < bitSet.length(); ++i) {
+            if (bitSet.get(i)) {
+                onePos = i;
+                break;
+            }
+        }
+        
+        for (int i = onePos; i >= curPos; --i) {
+            bitSet.flip(i);
+        }
+        
+        // TODO если невозможно занять бит
     }
     
     /**
@@ -123,6 +297,7 @@ public class ACSTest implements TestAlgorithm {
     
     private int meetFrequency;                  // частота встречаемости элементов первого множества
     
+    private BitSet currentAmount;               // текущая сумма расстояний
     private BitSet currentDistance;             // текущее среднее расстояние между значениями в словаре
     
     private SortedSet<BitSet> sortedPart = new TreeSet<>(BIT_SET_COMPARATOR);           // словарь
