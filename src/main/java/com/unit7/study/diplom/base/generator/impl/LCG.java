@@ -7,6 +7,7 @@
 
 package com.unit7.study.diplom.base.generator.impl;
 
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Set;
 
@@ -63,6 +64,11 @@ public class LCG implements Generator<BitSet> {
         short zeroCounter = 0;
         
         lcgRand(dunif);
+        
+        if (logger.isDebugEnabled()) {
+            logger.debug("dunif array: {}", Arrays.toString(dunif));
+        }
+        
         for (short i = 0; i < dunif.length; ++i) {
             if (dunif[i] < 0.5) {
                 zeroCounter += 1;
