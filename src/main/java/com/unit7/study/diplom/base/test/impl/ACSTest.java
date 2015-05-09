@@ -190,20 +190,6 @@ public class ACSTest implements TestAlgorithm {
         currentDistance = div(currentAmount, BitSet.valueOf(new long[] { sortedPart.size() - 1 }));
     }
     
-    public static void main(String[] args) {
-        final BitSet[] seq = new BitSet[5];
-        final ACSTest test = new ACSTest(seq, (short) 5);
-        
-        BitSet left = new BitSet();
-        BitSet right = new BitSet();
-        
-        left.set(11);
-        
-        right.set(5);
-        
-        logger.info("{} / {} = {}", test.bitSetToString(left), test.bitSetToString(right), test.bitSetToString(test.div(left, right)));
-    }
-    
     private void executeStageTwo() {
         for (int i = 0; i < stageTwoSize; ++i) {
             final int index = stageOneSize + i;
