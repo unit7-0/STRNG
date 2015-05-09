@@ -60,8 +60,84 @@ public class ACSTest implements TestAlgorithm {
         normalizeSortedPart();
     }
     
+    /**
+     * Проредить выборку, сделав ее равномерной - чтобы элементы были равноудалены друг от друга
+     */
     private void normalizeSortedPart() {
-        // TODO
+        final BitSet bitSetTwo = BitSet.valueOf(new long[] { 2 });
+        BitSet distanceDoubled = mul(currentDistance, bitSetTwo);
+        
+        while (true) {
+            boolean finished = true;
+            final Iterator<BitSet> it = sortedPart.iterator();
+            BitSet prev = it.next();
+            while (it.hasNext()) {
+                final BitSet cur = it.next();
+                final BitSet dist = sub(cur, prev);
+                
+                if (BIT_SET_COMPARATOR.compare(dist, distanceDoubled) >= 0) {
+                    // проредить
+                    currentDistance = removeSequenceWithMinDist(dist);
+                    distanceDoubled = mul(currentDistance, bitSetTwo);
+                    
+                    finished = false;
+                    break;
+                }
+                
+                prev = cur;
+                
+                if (!finished)
+                    break;
+            }
+        }
+    }
+    
+    /**
+     * Удалить одну или несколько последовательностей, в результате чего удвоенное среднее расстояние будет больше требуемого
+     * @param requiredDistance требуемое среднее расстояние
+     * @return новое среднее расстояние между последовательностями
+     */
+    private BitSet removeSequenceWithMinDist(BitSet requiredDistance) {
+        
+        BitSet newDistance = currentDistance;
+        
+        do {
+            final Iterator<BitSet> it = sortedPart.iterator();
+            BitSet pprev = it.next();
+            BitSet prev = it.next();
+            
+            BitSet newDistanceCalced = div(currentAmount, BitSet.valueOf(new long[] { sortedPart.size() - 2 }));
+            BitSet newDistanceDoubled = mul(newDistanceCalced, BitSet.valueOf(new long[] { 2 }));
+            
+            boolean removed = false;
+            
+            while (it.hasNext()) {
+                final BitSet current = it.next();
+                final BitSet distance = sub(current, pprev);
+                
+                if (BIT_SET_COMPARATOR.compare(distance, newDistanceDoubled) < 0) {
+                    sortedPart.remove(prev);
+                    removed = true;
+                    break;
+                }
+                
+                if (removed)
+                    break;
+                
+                pprev = prev;
+                prev  = current;
+            }
+            
+            if (BIT_SET_COMPARATOR.compare(requiredDistance, newDistanceDoubled) < 0) {
+                newDistance = newDistanceCalced;
+                break;
+            }
+
+            // TODO throw exception
+            
+        } while (true);
+        
+        return newDistance;
     }
     
     /**
@@ -151,6 +227,28 @@ public class ACSTest implements TestAlgorithm {
         }
         
         return seq.toString();
+    }
+    
+    /**
+     * Умножить первый на второй
+     * @param left
+     * @param right
+     * @return
+     */
+    private BitSet mul(BitSet left, BitSet right) {
+        final BigInteger a = new BigInteger(bitSetToString(left), 2);
+        final BigInteger b = new BigInteger(bitSetToString(right), 2);
+        
+        final BigInteger result = a.multiply(b);
+        final BitSet bitSet = new BitSet();
+        
+        for (int i = 0; i < result.bitLength(); ++i) {
+            if (result.testBit(i)) {
+                bitSet.set(i);
+            }
+        }
+        
+        return bitSet;
     }
     
     /**
