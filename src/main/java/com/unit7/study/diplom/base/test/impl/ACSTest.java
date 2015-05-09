@@ -7,6 +7,7 @@
 
 package com.unit7.study.diplom.base.test.impl;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.Comparator;
@@ -194,7 +195,7 @@ public class ACSTest implements TestAlgorithm {
         for (int i = 0; i < stageTwoSize; ++i) {
             final int index = stageOneSize + i;
             final BitSet next = sequence[index];
-            final BitSet distance = findMinDist(next);
+            final BitSet distance = findMinDistance(next);
             
             if (distance != null && BIT_SET_COMPARATOR.compare(currentDistance, distance) > 0)
                 distanceSet.add(distance);
@@ -205,7 +206,7 @@ public class ACSTest implements TestAlgorithm {
         for (int i = 0; i < stageThreeSize; ++i) {
             final int index = i + stageOneSize + stageTwoSize;
             final BitSet next = sequence[index];
-            final BitSet distance = findMinDist(next);
+            final BitSet distance = findMinDistance(next);
             if (distanceSet.contains(distance)) {
                 meetFrequency += 1;
             }
@@ -365,8 +366,23 @@ public class ACSTest implements TestAlgorithm {
      * Рассчитать конечное значение x2
      */
     private double calcFinalValue() {
-        // TODO
-        return 0;
+        
+        final double p = new BigDecimal("2").multiply(BigDecimal.valueOf(sortedPart.size()))
+                                            .multiply(BigDecimal.valueOf(distanceSet.size()))
+                                            .divide(BigDecimal.valueOf(2).pow(bitCount))
+                                            .doubleValue();
+        
+        logger.debug("Calculated probability: {}", p);
+        
+        final double np = stageThreeSize * p;
+        final double np1 = stageThreeSize * (1 - p);
+        final double x2 = sqr(meetFrequency - np) / np + sqr(stageThreeSize - meetFrequency - np1) / np1;
+        
+        return x2;
+    }
+    
+    private double sqr(double a) {
+        return a * a;
     }
     
     /**
@@ -374,7 +390,7 @@ public class ACSTest implements TestAlgorithm {
      * @param value значение для сравнения
      * @return кратчайшее расстояние
      */
-    private BitSet findMinDist(BitSet value) {
+    private BitSet findMinDistance(BitSet value) {
         BitSet distance = null;
         
         for (BitSet bs : sortedPart) {
@@ -415,6 +431,8 @@ public class ACSTest implements TestAlgorithm {
         executeStageThree();
         
         final double x2 = calcFinalValue();
+        
+        logger.info("Calculated x2: {}", x2);
         
         return x2 <= 0.00016;
     }
