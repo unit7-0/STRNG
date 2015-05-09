@@ -375,8 +375,23 @@ public class ACSTest implements TestAlgorithm {
      * @return кратчайшее расстояние
      */
     private BitSet findMinDist(BitSet value) {
-        // TODO
-        return null;
+        BitSet distance = null;
+        
+        for (BitSet bs : sortedPart) {
+            BitSet left = bs;
+            BitSet right = value;
+            if (BIT_SET_COMPARATOR.compare(left, right) < 0) {
+                left = value;
+                right = bs;
+            }
+            
+            final BitSet newDistance = sub(left, right);
+            if (distance == null || BIT_SET_COMPARATOR.compare(distance, newDistance) > 0) {
+                distance = newDistance;
+            }
+        }
+        
+        return distance;
     }
     
     /**
