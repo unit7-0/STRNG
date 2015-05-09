@@ -57,7 +57,38 @@ public class ACSTest implements TestAlgorithm {
         }
         
         findAvgDistance();
+        
+        // b0 > r
+        while (BIT_SET_COMPARATOR.compare(sortedPart.first(), currentDistance) <= 0) {
+            sortedPart.remove(sortedPart.first());
+        }
+        
+        final BitSet powerSubDistance = sub(calcSetPower(), currentDistance);
+        
+        // bm < s - r
+        while (BIT_SET_COMPARATOR.compare(sortedPart.last(), powerSubDistance) > 0) {
+            sortedPart.remove(sortedPart.last());
+        }
+        
+        // bi < 2 * r
         normalizeSortedPart();
+    }
+    
+    /**
+     * Посчитать мощность алфаватиа
+     * @return
+     */
+    private BitSet calcSetPower() {
+        final BigInteger result = new BigInteger("2").pow(bitCount);
+        
+        final BitSet bitSet = new BitSet();
+        for (int i = 0; i < result.bitLength(); ++i) {
+            if (result.testBit(i)) {
+                bitSet.set(i);
+            }
+        }
+        
+        return bitSet;
     }
     
     /**
