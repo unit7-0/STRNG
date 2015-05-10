@@ -1,11 +1,11 @@
 /**
  * Date:	10 мая 2015 г.
- * File:	ACSTestV2.java
+ * File:	BookStackTestV3.java
  *
  * Author:	Zajcev V.
  */
 
-package com.unit7.study.diplom.acs;
+package com.unit7.study.diplom.bookstack.test;
 
 import java.util.BitSet;
 
@@ -18,21 +18,20 @@ import com.unit7.study.diplom.base.test.impl.TestWorkflow;
  * @author unit7
  *
  */
-public class ACSTestV2 {
+public class BookStackTestV3 {
 
     @org.junit.Test
-    public void generate23() {
-        final int iterations = 10;
-        final int bitCount = 30;
-        final int selectionCount = 30625;
-        
-        final Generator<BitSet> g = new LCG((short) bitCount);
+    public void generate() {
+        final short iterations = 10;
+        final short bitCount = 10;
+        final int selectionCount = 1000;
+        final Generator<BitSet> g = new LCG(bitCount);
         
         final TestWorkflow<BitSet> workflow = new TestWorkflow<>();
         
-        workflow.setAlgorithmType(TestAlgorithmType.ACS);
+        workflow.setAlgorithmType(TestAlgorithmType.BOOK_STACK);
         workflow.setGenerator(g);
-        workflow.setIterations((short) iterations);
+        workflow.setIterations(iterations);
         workflow.setSelectionCount(selectionCount);
         
         workflow.start();
