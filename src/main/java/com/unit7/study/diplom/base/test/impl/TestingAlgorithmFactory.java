@@ -10,8 +10,8 @@ package com.unit7.study.diplom.base.test.impl;
 import java.util.BitSet;
 
 import com.google.common.base.Preconditions;
-import com.unit7.study.diplom.base.test.TestAlgorithm;
-import com.unit7.study.diplom.base.test.TestAlgorithmType;
+import com.unit7.study.diplom.base.test.TestingAlgorithm;
+import com.unit7.study.diplom.base.test.TestingAlgorithmType;
 
 /**
  * Фабрика тестовых алгоритмов
@@ -19,16 +19,16 @@ import com.unit7.study.diplom.base.test.TestAlgorithmType;
  * @author unit7
  *
  */
-public class TestAlgorithmFactory {
+public class TestingAlgorithmFactory {
     @SuppressWarnings("unchecked")
-    public static <T> TestAlgorithm<T> createAlgorithm(TestAlgorithmType type, T[] sequence, short bitCount) {
+    public static <T> TestingAlgorithm<T> createAlgorithm(TestingAlgorithmType type, T[] sequence, short bitCount) {
         Preconditions.checkNotNull(type, "algorithm type required");
 
         switch (type) {
             case ACS:
-                return (TestAlgorithm<T>) new ACSTest((BitSet[]) (Object[]) sequence, bitCount);
+                return (TestingAlgorithm<T>) new ACSTest((BitSet[]) (Object[]) sequence, bitCount);
             case BOOK_STACK:
-                return (TestAlgorithm<T>) new BookStackTest((BitSet[]) sequence, bitCount);
+                return (TestingAlgorithm<T>) new BookStackTest((BitSet[]) (Object[]) sequence, bitCount);
             default:
                 throw new IllegalArgumentException("The type " + type + " is unknown for this factory");
         }

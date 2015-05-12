@@ -14,8 +14,8 @@ package com.unit7.study.diplom.base.test;
  * @author unit7
  *
  */
-public abstract class TestAlgorithm<T> {
-    public TestAlgorithm(T[] sequence, short bitCount) {
+public abstract class TestingAlgorithm<T> {
+    public TestingAlgorithm(T[] sequence, short bitCount) {
         this.sequence = sequence;
         this.bitCount = bitCount;
     }

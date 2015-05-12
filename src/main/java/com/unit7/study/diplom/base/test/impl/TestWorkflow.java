@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.unit7.study.diplom.base.generator.Generator;
-import com.unit7.study.diplom.base.test.TestAlgorithm;
-import com.unit7.study.diplom.base.test.TestAlgorithmType;
+import com.unit7.study.diplom.base.test.TestingAlgorithm;
+import com.unit7.study.diplom.base.test.TestingAlgorithmType;
 import com.unit7.study.diplom.base.test.Workflow;
 
 /**
@@ -52,7 +52,7 @@ public class TestWorkflow<T> implements Workflow {
                 sequence[j] = generator.next();
             }
             
-            final TestAlgorithm<T> alg = TestAlgorithmFactory.createAlgorithm(algorithmType, sequence, generator.bitCount());
+            final TestingAlgorithm<T> alg = TestingAlgorithmFactory.createAlgorithm(algorithmType, sequence, generator.bitCount());
             final boolean testResult = alg.test();
             
             logger.debug("Iteration {}, testResult: {}", i, testResult);
@@ -88,16 +88,16 @@ public class TestWorkflow<T> implements Workflow {
         this.generator = generator;
     }
 
-    public TestAlgorithmType getAlgorithmType() {
+    public TestingAlgorithmType getAlgorithmType() {
         return algorithmType;
     }
 
-    public void setAlgorithmType(TestAlgorithmType algorithmType) {
+    public void setAlgorithmType(TestingAlgorithmType algorithmType) {
         this.algorithmType = algorithmType;
     }
 
     private short iterations;                   // количество итераций теста
     private int selectionCount;                 // количество выборок
     private Generator<T> generator;             // генератор выборки
-    private TestAlgorithmType algorithmType;    // тип алгоритма тестирования
+    private TestingAlgorithmType algorithmType;    // тип алгоритма тестирования
 }

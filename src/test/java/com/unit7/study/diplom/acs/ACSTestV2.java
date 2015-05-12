@@ -11,7 +11,7 @@ import java.util.BitSet;
 
 import com.unit7.study.diplom.base.generator.Generator;
 import com.unit7.study.diplom.base.generator.impl.LCG;
-import com.unit7.study.diplom.base.test.TestAlgorithmType;
+import com.unit7.study.diplom.base.test.TestingAlgorithmType;
 import com.unit7.study.diplom.base.test.impl.TestWorkflow;
 
 /**
@@ -30,7 +30,7 @@ public class ACSTestV2 {
         
         final TestWorkflow<BitSet> workflow = new TestWorkflow<>();
         
-        workflow.setAlgorithmType(TestAlgorithmType.ACS);
+        workflow.setAlgorithmType(TestingAlgorithmType.ACS);
         workflow.setGenerator(g);
         workflow.setIterations((short) iterations);
         workflow.setSelectionCount(selectionCount);

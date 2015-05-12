@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.unit7.study.diplom.base.test.TestAlgorithm;
+import com.unit7.study.diplom.base.test.TestingAlgorithm;
 
 /**
  * Алгоритм тестирования новый адаптивный хи-квадрат
@@ -31,7 +31,7 @@ import com.unit7.study.diplom.base.test.TestAlgorithm;
  * @author unit7
  *
  */
-public class ACSTest extends TestAlgorithm<BitSet> {
+public class ACSTest extends TestingAlgorithm<BitSet> {
     private static final Logger logger = LoggerFactory.getLogger(ACSTest.class);    
 
     public ACSTest(BitSet[] sequence, short bitCount) {

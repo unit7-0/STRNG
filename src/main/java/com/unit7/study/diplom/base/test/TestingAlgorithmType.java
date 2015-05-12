@@ -13,7 +13,7 @@ package com.unit7.study.diplom.base.test;
  * @author unit7
  *
  */
-public enum TestAlgorithmType {
+public enum TestingAlgorithmType {
     ACS,
     BOOK_STACK
 }

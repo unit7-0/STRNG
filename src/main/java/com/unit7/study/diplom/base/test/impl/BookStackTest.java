@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.unit7.study.diplom.base.BSSet;
-import com.unit7.study.diplom.base.test.TestAlgorithm;
+import com.unit7.study.diplom.base.test.TestingAlgorithm;
 
 /**
  * Алгоритм тестирования стопка книг
@@ -23,7 +23,7 @@ import com.unit7.study.diplom.base.test.TestAlgorithm;
  * @author unit7
  *
  */
-public class BookStackTest extends TestAlgorithm<BitSet> {
+public class BookStackTest extends TestingAlgorithm<BitSet> {
     private static final Logger logger = LoggerFactory.getLogger(BookStackTest.class);
     
     public BookStackTest(BitSet[] sequence, short bitCount) {

@@ -11,7 +11,7 @@ import java.util.BitSet;
 
 import com.unit7.study.diplom.base.generator.Generator;
 import com.unit7.study.diplom.base.generator.impl.LCG;
-import com.unit7.study.diplom.base.test.TestAlgorithmType;
+import com.unit7.study.diplom.base.test.TestingAlgorithmType;
 import com.unit7.study.diplom.base.test.impl.TestWorkflow;
 
 /**
@@ -29,7 +29,7 @@ public class BookStackTestV3 {
         
         final TestWorkflow<BitSet> workflow = new TestWorkflow<>();
         
-        workflow.setAlgorithmType(TestAlgorithmType.BOOK_STACK);
+        workflow.setAlgorithmType(TestingAlgorithmType.BOOK_STACK);
         workflow.setGenerator(g);
         workflow.setIterations(iterations);
         workflow.setSelectionCount(selectionCount);
