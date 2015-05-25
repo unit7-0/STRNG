@@ -23,11 +23,11 @@ public class ACSTestV2 {
 
     @org.junit.Test
     public void generate23() {
-        final int iterations = 10;
+        final int iterations = 3;
         final short bitCount = 30;
-        final int selectionCount = 30625;
+        final int selectionCount = 36000;
         
-        final Generator<BitSet> g = new GenericLCG(69069L, 1L, ((long) Integer.MAX_VALUE) + 1, 1L, bitCount);//new LCG((short) bitCount);
+        final Generator<BitSet> g = new GenericLCG(69069L, 1L, (((long) Integer.MAX_VALUE)+ 1) * 2, 1L, bitCount);//new LCG((short) bitCount);
         
         final TestWorkflow<BitSet> workflow = new TestWorkflow<>();
         
