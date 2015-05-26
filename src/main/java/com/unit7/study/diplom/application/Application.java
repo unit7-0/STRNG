@@ -31,7 +31,7 @@ public class Application {
             final PrintStream stream = System.out;
             
             stream.println("Задайте параметры тестирования");
-            stream.print("Выберите тип теста: 1 - Стопка книг, 2 - Новый адаптивный хи-квадрат:");
+            stream.print("Выберите тип теста: 1 - Новый адаптивный хи-квадрат, 2 - Стопка книг:");
             
             final int testType = scanner.nextInt();
             if (testType < 1 || testType > 2) {
@@ -41,9 +41,10 @@ public class Application {
             
             scanner.nextLine();
         
-            stream.print("Введите длину последовательности и количество итераций теста через пробел:");
+            stream.print("Введите длину последовательности, количество последовательностей[>3] и количество итераций теста через пробел:");
             
-            final short sequenceLength = scanner.nextShort();
+            final short blockSize = scanner.nextShort();
+            final int blockCount = scanner.nextInt();
             final short iterationCount = scanner.nextShort();
             
             scanner.nextLine();          
@@ -61,7 +62,7 @@ public class Application {
                 
                 final int g = scanner.nextInt() - 1;
                 if (g < 0 || g >= LCG_LIST.length) {
-                    stream.println("Неверный вариан");
+                    stream.println("Неверный вариант");
                     return;
                 }
                 
@@ -81,10 +82,10 @@ public class Application {
                 final long b = Long.parseLong(params[1]);
                 final long m = Long.parseLong(params[2]);
                 
-                generator = new GenericLCG(a, b, m, 1L, sequenceLength);
+                generator = new GenericLCG(a, b, m, 1L, blockSize);
             }
             
-            generator.setBitCount(sequenceLength);
+            generator.setBitCount(blockSize);
         
             final TestingAlgorithmType testingAlgorithmType = TestingAlgorithmType.values()[testType - 1];
             
@@ -92,7 +93,7 @@ public class Application {
             
             workflow.setAlgorithmType(testingAlgorithmType);
             workflow.setIterations(iterationCount);
-            workflow.setSelectionCount(sequenceLength);
+            workflow.setSelectionCount(blockCount);
             workflow.setGenerator(generator);
             
             workflow.start();
