@@ -42,7 +42,7 @@ public class GenericLCG implements Generator<BitSet> {
     }
     
     public GenericLCG(long a, long b, long mod, long lastValue, short bitCount) {
-        Preconditions.checkArgument(mod > 8, "mod should be > 8");
+        Preconditions.checkArgument(mod > 256, "mod should be > 256");
         
         this.a = a;
         this.b = b;
@@ -97,8 +97,8 @@ public class GenericLCG implements Generator<BitSet> {
         throw new UnsupportedOperationException();
     }
 
-    public short getBitCount() {
-        return bitCount;
+    public void setBitCount(short bitCount) {
+        this.bitCount = bitCount;
     }
 
     public long getA() {
@@ -131,5 +131,10 @@ public class GenericLCG implements Generator<BitSet> {
 
     public void setLastValue(long lastValue) {
         this.lastValue = lastValue;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("GenericLCG [a=%s, b=%s, mod=%s]", a, b, mod);
     }
 }
