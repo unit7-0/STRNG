@@ -9,6 +9,7 @@ package com.unit7.study.diplom.application;
 
 import java.io.PrintStream;
 import java.util.BitSet;
+import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -97,6 +98,18 @@ public class Application {
             workflow.setGenerator(generator);
             
             workflow.start();
+            
+            final List<Boolean> result = workflow.getTestResult();
+            
+            stream.println("Результаты теста:");
+            
+            int success = 0;
+            for (Boolean r : result) {
+                if (!r) {
+                    success += 1;
+                }
+            }
+            stream.println("\r\nТест не пройден: " + success + "/" + result.size());
             
         } catch (Exception e) {
             logger.error("Произошла ошибка", e);

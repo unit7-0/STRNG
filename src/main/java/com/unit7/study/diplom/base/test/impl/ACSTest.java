@@ -45,7 +45,7 @@ public class ACSTest extends TestingAlgorithm<BitSet> {
      */
     private void calcDimensions() {
         sequenceLength = sequence.length;
-        stageOneSize = (int) (sequenceLength * 0.1);
+        stageOneSize = (int) (sequenceLength * 0.01);
         stageTwoSize = (int) (stageOneSize * 0.7);
         stageThreeSize = sequenceLength - stageOneSize - stageTwoSize;
     }

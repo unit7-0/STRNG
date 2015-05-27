@@ -82,7 +82,10 @@ public class BookStackTest extends TestingAlgorithm<BitSet> {
     public boolean test() {
         prepare();
         
-        final double x2 = calcDimension();
+        double x2 = calcDimension();
+        
+        if (Double.isNaN(x2))
+            x2 = 0;
         
         logger.info("Calculated x2: {} against hi2: 0.00016", x2);
         

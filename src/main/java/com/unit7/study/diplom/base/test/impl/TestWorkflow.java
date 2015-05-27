@@ -8,7 +8,9 @@
 package com.unit7.study.diplom.base.test.impl;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +49,8 @@ public class TestWorkflow<T> implements Workflow {
         @SuppressWarnings("unchecked")
         final T[] sequence = (T[]) Array.newInstance(BitSet.class, selectionCount);
         
+        result = new ArrayList<>(iterations);
+        
         for (short i = 0; i < iterations; ++i) {
             for (int j = 0; j < selectionCount; ++j) {
                 sequence[j] = generator.next();
@@ -57,8 +61,10 @@ public class TestWorkflow<T> implements Workflow {
             
             logger.debug("Iteration {}, testResult: {}", i, testResult);
             
-            if (!testResult)
+            result.add(testResult);
+            if (!testResult) {
                 failedTestCounter += 1;
+            }
         }
         
         logger.info("Failed test counter: {}", failedTestCounter);
@@ -95,9 +101,15 @@ public class TestWorkflow<T> implements Workflow {
     public void setAlgorithmType(TestingAlgorithmType algorithmType) {
         this.algorithmType = algorithmType;
     }
+    
+    public List<Boolean> getTestResult() {
+        return result;
+    }
 
     private short iterations;                   // количество итераций теста
     private int selectionCount;                 // количество выборок
     private Generator<T> generator;             // генератор выборки
     private TestingAlgorithmType algorithmType;    // тип алгоритма тестирования
+    
+    private List<Boolean> result;
 }
