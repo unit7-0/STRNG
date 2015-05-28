@@ -89,7 +89,7 @@ public class BookStackTest extends TestingAlgorithm<BitSet> {
         
         logger.info("Calculated x2: {} against hi2: 0.00016", x2);
         
-        return x2 <= 0.00016;
+        return x2 <= hi2;
     }
 
     private Set<BitSet> preparedSet;
