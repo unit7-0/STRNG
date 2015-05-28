@@ -435,7 +435,7 @@ public class ACSTest extends TestingAlgorithm<BitSet> {
         
         logger.info("Calculated x2: {}", x2);
         
-        return x2 <= 0.00016;
+        return x2 <= hi2;
     }
 
     private int sequenceLength;                 // размер всей тестовой выборки
