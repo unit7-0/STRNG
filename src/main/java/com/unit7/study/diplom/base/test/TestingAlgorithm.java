@@ -20,8 +20,17 @@ public abstract class TestingAlgorithm<T> {
         this.bitCount = bitCount;
     }
     
+    public double getHi2() {
+        return hi2;
+    }
+    
+    public void setHi2(double hi2) {
+        this.hi2 = hi2;
+    }
+    
     public abstract boolean test();
     
     protected short bitCount;                     // степень двойки мощности словаря
     protected T[] sequence;                  // выборка данных
+    protected double hi2;                    // уровень значимости - значение хи-квадрат
 }
