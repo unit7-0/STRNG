@@ -57,6 +57,7 @@ public class TestWorkflow<T> implements Workflow {
             }
             
             final TestingAlgorithm<T> alg = TestingAlgorithmFactory.createAlgorithm(algorithmType, sequence, generator.bitCount());
+            alg.setHi2(0.00016); // уровень значимости 0.99
             final boolean testResult = alg.test();
             
             logger.debug("Iteration {}, testResult: {}", i, testResult);
