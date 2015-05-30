@@ -28,8 +28,8 @@ import com.unit7.study.diplom.base.generator.impl.IntSEGenerator;
  * @author unit7
  *
  */
-public class ACSTest {
-    private static final Logger logger = LoggerFactory.getLogger(ACSTest.class);
+public class NATTest {
+    private static final Logger logger = LoggerFactory.getLogger(NATTest.class);
     
     @Test
     public void testMethod() {

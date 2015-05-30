@@ -14,6 +14,16 @@ package com.unit7.study.diplom.base.test;
  *
  */
 public enum TestingAlgorithmType {
-    ACS,
-    BOOK_STACK
+    NAT("Новый адаптивный хи-квадрат"),
+    BOOK_STACK("Стопка книг");
+    
+    private String caption;
+    
+    private TestingAlgorithmType(String caption) {
+        this.caption = caption;
+    }
+    
+    public String getCaption() {
+        return caption;
+    }
 }

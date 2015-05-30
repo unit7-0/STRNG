@@ -11,7 +11,6 @@ import java.util.BitSet;
 
 import com.unit7.study.diplom.base.generator.Generator;
 import com.unit7.study.diplom.base.generator.impl.GenericLCG;
-import com.unit7.study.diplom.base.generator.impl.LCG;
 import com.unit7.study.diplom.base.test.TestingAlgorithmType;
 import com.unit7.study.diplom.base.test.impl.TestWorkflow;
 
@@ -19,7 +18,7 @@ import com.unit7.study.diplom.base.test.impl.TestWorkflow;
  * @author unit7
  *
  */
-public class ACSTestV2 {
+public class NATTestV2 {
 
     @org.junit.Test
     public void generate23() {
@@ -31,7 +30,7 @@ public class ACSTestV2 {
         
         final TestWorkflow<BitSet> workflow = new TestWorkflow<>();
         
-        workflow.setAlgorithmType(TestingAlgorithmType.ACS);
+        workflow.setAlgorithmType(TestingAlgorithmType.NAT);
         workflow.setGenerator(g);
         workflow.setIterations((short) iterations);
         workflow.setSelectionCount(selectionCount);

@@ -31,12 +31,12 @@ import com.unit7.study.diplom.base.test.TestingAlgorithm;
  * @author unit7
  *
  */
-public class ACSTest extends TestingAlgorithm<BitSet> {
-    private static final Logger logger = LoggerFactory.getLogger(ACSTest.class);    
+public class NATTest extends TestingAlgorithm<BitSet> {
+    private static final Logger logger = LoggerFactory.getLogger(NATTest.class);    
 
-    public ACSTest(BitSet[] sequence, short bitCount) {
+    public NATTest(BitSet[] sequence, short bitCount) {
         super(sequence, bitCount);
-        if (sequence == null || sequence.length < 3)
+        if (sequence == null || sequence.length < 200)
             throw new IllegalArgumentException("sequence should not be null and length should be >= 3");
     }
 
@@ -58,14 +58,14 @@ public class ACSTest extends TestingAlgorithm<BitSet> {
         findAvgDistance();
         
         // b0 > r
-        while (BIT_SET_COMPARATOR.compare(sortedPart.first(), currentDistance) <= 0) {
+        while (!sortedPart.isEmpty() && BIT_SET_COMPARATOR.compare(sortedPart.first(), currentDistance) <= 0) {
             sortedPart.remove(sortedPart.first());
         }
         
         final BitSet powerSubDistance = sub(calcSetPower(), currentDistance);
         
         // bm < s - r
-        while (BIT_SET_COMPARATOR.compare(sortedPart.last(), powerSubDistance) > 0) {
+        while (!sortedPart.isEmpty() && BIT_SET_COMPARATOR.compare(sortedPart.last(), powerSubDistance) > 0) {
             sortedPart.remove(sortedPart.last());
         }
         
@@ -245,6 +245,9 @@ public class ACSTest extends TestingAlgorithm<BitSet> {
             seq.insert(0, Strings.padStart(Long.toBinaryString(word), 63, '0'));
         }
         
+        if (seq.length() == 0)
+            return "0";
+        
         return seq.toString();
     }
     
@@ -416,6 +419,9 @@ public class ACSTest extends TestingAlgorithm<BitSet> {
      * @return
      */
     private int calcStageThreeSize() {
+        if (distanceSet.isEmpty())
+            return stageThreeSize;
+        
         return (int) (5 * (long) Math.pow(2, bitCount) / (2 * sortedPart.size() * distanceSet.size())) + stageTwoSize + stageOneSize;
     }
     

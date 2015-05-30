@@ -25,8 +25,8 @@ public class TestingAlgorithmFactory {
         Preconditions.checkNotNull(type, "algorithm type required");
 
         switch (type) {
-            case ACS:
-                return (TestingAlgorithm<T>) new ACSTest((BitSet[]) (Object[]) sequence, bitCount);
+            case NAT:
+                return (TestingAlgorithm<T>) new NATTest((BitSet[]) (Object[]) sequence, bitCount);
             case BOOK_STACK:
                 return (TestingAlgorithm<T>) new BookStackTest((BitSet[]) (Object[]) sequence, bitCount);
             default:

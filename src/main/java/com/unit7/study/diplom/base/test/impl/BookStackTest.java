@@ -64,7 +64,7 @@ public class BookStackTest extends TestingAlgorithm<BitSet> {
         final double p2 = BigDecimal.valueOf(n2).divide(setPower).doubleValue();
         
         logger.debug("Calculated first set matching and probability: [ {}, {} ], second set matching and probability: [ {}, {} ]",
-                n1, n2, p1, p2);
+                n1, p1, n2, p2);
         
         final double np1 = selectionCount * p1;
         final double np2 = selectionCount * p2;
@@ -87,7 +87,7 @@ public class BookStackTest extends TestingAlgorithm<BitSet> {
         if (Double.isNaN(x2))
             x2 = 0;
         
-        logger.info("Calculated x2: {} against hi2: 0.00016", x2);
+        logger.info("Calculated x2: {} against hi2: {}", x2, hi2);
         
         return x2 <= hi2;
     }
