@@ -45,8 +45,8 @@ public class NATTest extends TestingAlgorithm<BitSet> {
      */
     private void calcDimensions() {
         sequenceLength = sequence.length;
-        stageOneSize = (int) (sequenceLength * 0.01);
-        stageTwoSize = (int) (stageOneSize * 0.7);
+        stageOneSize = sequence.length / 3; //(int) (sequenceLength * 0.01);
+        stageTwoSize = stageOneSize;//(int) (stageOneSize * 0.7);
         stageThreeSize = sequenceLength - stageOneSize - stageTwoSize;
     }
     
@@ -138,6 +138,9 @@ public class NATTest extends TestingAlgorithm<BitSet> {
             final Iterator<BitSet> it = sortedPart.iterator();
             BitSet pprev = it.next();
             BitSet prev = it.next();
+            
+            if (sortedPart.size() < 3)
+                throw new RuntimeException("sortedPart.size() < 3: cannot remove element");
             
             BitSet newDistanceCalced = div(currentAmount, BitSet.valueOf(new long[] { sortedPart.size() - 2 }));
             BitSet newDistanceDoubled = mul(newDistanceCalced, BitSet.valueOf(new long[] { 2 }));
@@ -422,7 +425,8 @@ public class NATTest extends TestingAlgorithm<BitSet> {
         if (distanceSet.isEmpty())
             return stageThreeSize;
         
-        return (int) (5 * (long) Math.pow(2, bitCount) / (2 * sortedPart.size() * distanceSet.size())) + stageTwoSize + stageOneSize;
+        return stageThreeSize;
+       // return (int) (5 * (long) Math.pow(2, bitCount) / (2 * sortedPart.size() * distanceSet.size())) + stageTwoSize + stageOneSize;
     }
     
     @Override
@@ -430,7 +434,12 @@ public class NATTest extends TestingAlgorithm<BitSet> {
         
         calcDimensions();
         
-        executeStageOne();
+        try {
+            executeStageOne();
+        } catch (RuntimeException e) {
+            return true; // TODO make normal exception. think about situation. Now suppose test is true
+        }
+        
         executeStageTwo();
         
         stageThreeSize = Math.min(calcStageThreeSize(), sequenceLength - stageOneSize - stageTwoSize);

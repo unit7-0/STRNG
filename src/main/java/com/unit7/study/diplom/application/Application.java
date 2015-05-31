@@ -57,17 +57,17 @@ public class Application {
             
             if ("y".equals(ans.toLowerCase())) {
                 stream.println("Выберети генератор из списка ниже");
-                for (int i = 0; i < LCG_LIST.length; ++i) {
-                    stream.println((i + 1) + " - " + LCG_LIST[i]);
+                for (int i = 0; i < GenericLCG.LCG_LIST.length; ++i) {
+                    stream.println((i + 1) + " - " + GenericLCG.LCG_LIST[i]);
                 }
                 
                 final int g = scanner.nextInt() - 1;
-                if (g < 0 || g >= LCG_LIST.length) {
+                if (g < 0 || g >= GenericLCG.LCG_LIST.length) {
                     stream.println("Неверный вариант");
                     return;
                 }
                 
-                generator = LCG_LIST[g];
+                generator = GenericLCG.LCG_LIST[g];
             } else { 
                 
                 stream.print("Задайте параметры генератора через пробел [a, b, m]:");
@@ -115,17 +115,4 @@ public class Application {
             logger.error("Произошла ошибка", e);
         }
     }
-    
-    private static final GenericLCG[] LCG_LIST = new GenericLCG[] {
-        new GenericLCG(69069L, 1L, (((long) Integer.MAX_VALUE) + 1) * 2, 1L, (short) 1),
-        new GenericLCG(1099087573L, 0L, (((long) Integer.MAX_VALUE) + 1) * 2, 1L, (short) 1),
-        new GenericLCG(1220703125L, 0L, (long) Math.pow(2, 46), 1L, (short) 1),
-        new GenericLCG(25214903917L, 11L, (long) Math.pow(2, 48), 1L, (short) 1),
-        new GenericLCG(33952834046453L, 0L, (long) Math.pow(2, 48), 1L, (short) 1),
-        new GenericLCG(44485709377909L, 0L, (long) Math.pow(2, 48), 1L, (short) 1),
-        new GenericLCG((long) Math.pow(13, 13), 0L, (long) Math.pow(2, 59), 1L, (short) 1),
-        new GenericLCG((long) Math.pow(5, 19), 1L, (long) Math.pow(2, 63), 1L, (short) 1),
-        new GenericLCG((long) Math.pow(5, 19), 1L, (long) Math.pow(2, 48), 1L, (short) 1),
-        new GenericLCG(9219741426499971445L, 1L, (long) Math.pow(2, 63), 1L, (short) 1)
-    };
 }

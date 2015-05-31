@@ -137,4 +137,17 @@ public class GenericLCG implements Generator<BitSet> {
     public String toString() {
         return String.format("GenericLCG [a=%s, b=%s, mod=%s]", a, b, mod);
     }
+    
+    public static final GenericLCG[] LCG_LIST = new GenericLCG[] {
+        new GenericLCG(69069L, 1L, (((long) Integer.MAX_VALUE) + 1) * 2, 1L, (short) 1),
+        new GenericLCG(1099087573L, 0L, (((long) Integer.MAX_VALUE) + 1) * 2, 1L, (short) 1),
+        new GenericLCG(1220703125L, 0L, (long) Math.pow(2, 46), 1L, (short) 1),
+        new GenericLCG(25214903917L, 11L, (long) Math.pow(2, 48), 1L, (short) 1),
+        new GenericLCG(33952834046453L, 0L, (long) Math.pow(2, 48), 1L, (short) 1),
+        new GenericLCG(44485709377909L, 0L, (long) Math.pow(2, 48), 1L, (short) 1),
+        new GenericLCG((long) Math.pow(13, 13), 0L, (long) Math.pow(2, 59), 1L, (short) 1),
+        new GenericLCG((long) Math.pow(5, 19), 1L, (long) Math.pow(2, 63), 1L, (short) 1),
+        new GenericLCG((long) Math.pow(5, 19), 1L, (long) Math.pow(2, 48), 1L, (short) 1),
+        new GenericLCG(9219741426499971445L, 1L, (long) Math.pow(2, 63), 1L, (short) 1)
+    };
 }
