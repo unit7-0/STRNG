@@ -62,7 +62,8 @@ public class NATTest extends TestingAlgorithm<BitSet> {
             sortedPart.remove(sortedPart.first());
         }
         
-        final BitSet powerSubDistance = sub(calcSetPower(), currentDistance);
+        final BitSet setPower = calcSetPower();
+        final BitSet powerSubDistance = sub(setPower, currentDistance);
         
         // bm < s - r
         while (!sortedPart.isEmpty() && BIT_SET_COMPARATOR.compare(sortedPart.last(), powerSubDistance) > 0) {
@@ -77,15 +78,9 @@ public class NATTest extends TestingAlgorithm<BitSet> {
      * Посчитать мощность алфаватиа
      * @return
      */
-    private BitSet calcSetPower() {
-        final BigInteger result = new BigInteger("2").pow(bitCount);
-        
+    private BitSet calcSetPower() {        
         final BitSet bitSet = new BitSet();
-        for (int i = 0; i < result.bitLength(); ++i) {
-            if (result.testBit(i)) {
-                bitSet.set(i);
-            }
-        }
+        bitSet.set(bitCount);
         
         return bitSet;
     }
@@ -437,6 +432,7 @@ public class NATTest extends TestingAlgorithm<BitSet> {
         try {
             executeStageOne();
         } catch (RuntimeException e) {
+            logger.warn("NATTest exception warn: ", e);
             return true; // TODO make normal exception. think about situation. Now suppose test is true
         }
         
@@ -470,10 +466,12 @@ public class NATTest extends TestingAlgorithm<BitSet> {
     private static final Comparator<BitSet> BIT_SET_COMPARATOR = new Comparator<BitSet>() {
         @Override
         public int compare(BitSet left, BitSet right) {
-            if (left.length() != right.length())
-                return left.length() - right.length();
+            int leftLength = left.length();
+            int rightLength = right.length();
+            if (leftLength != rightLength)
+                return leftLength - rightLength;
             
-            for (int i = left.length() - 1; i >= 0; --i) {
+            for (int i = leftLength - 1; i >= 0; --i) {
                 if (left.get(i) ^ right.get(i)) {
                     if (left.get(i))
                         return 1;

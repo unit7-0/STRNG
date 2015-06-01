@@ -67,8 +67,10 @@ public class BSSet<T> implements Set<T> {
         for (T valueInTable : values) {
             if (valueInTable.equals(val)) {
                 // переместить в начало списка
-                values.remove(index);
-                values.add(0, valueInTable);
+                if (values.size() > 1 && index > 0) {
+                    values.remove(index);
+                    values.add(0, valueInTable);
+                }
                 return true;
             }
             index += 1;

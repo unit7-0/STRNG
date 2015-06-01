@@ -48,7 +48,7 @@ public class GenericLCG implements Generator<BitSet> {
         this.b = b;
         this.mod = mod;
         this.bitCount = bitCount;
-        this.lastValue = (a * lastValue + b) % mod;
+        this.lastValue = Math.abs(a * lastValue + b) % mod;
         
         maxBitPosition = (byte) (Math.log(mod) / Math.log(2) - 1);
         bitCounter = maxBitPosition;
@@ -63,15 +63,22 @@ public class GenericLCG implements Generator<BitSet> {
         
         logger.debug("bitCount: {}, bitCounter: {}, lastValue: {}", bitCount, bitCounter, lastValue);
         
+        int bitIndex = 7;
         for (int i = 0; i < bitCount; ++i) {
             if (bitCounter <= (maxBitPosition - BYTE_SIZE)) {
                 bitCounter = maxBitPosition;
-                lastValue = (a * lastValue + b) % mod;
+                lastValue = Math.abs(a * lastValue + b) % mod;
+            }
+            
+            if (i % BYTE_SIZE == 0 && i != 0) {
+                // устанавливать начинаем со старшего бита
+                // старший бит в извлеченном значении - старший бит в полученное значение
+                bitIndex = bitIndex + BYTE_SIZE * 2;
             }
             
             final boolean bit = ((lastValue >> bitCounter) & 1) > 0;
             if (bit) {
-                result.set(i);
+                result.set(bitIndex - i);
             }
             bitCounter -= 1;
         }
