@@ -26,10 +26,10 @@ import com.unit7.study.diplom.base.test.impl.TestWorkflow;
  *
  */
 public class FinalTest {
-    public static final short[] SELECTIONS_BITS = new short[] { 16, 24, 32, 48 };
+    public static final short[] SELECTIONS_BITS = new short[] { 48 };
     public static final int START_SELECTION_COUNT = 500;
-    public static final int MAX_SELECTION_COUNT = 900000;
-    public static final short ITERATIONS_COUNT = 10;
+    public static final long MAX_SELECTION_COUNT = 34359738368L;
+    public static final short ITERATIONS_COUNT = 1;
     
     private PrintWriter writer;
     
@@ -48,7 +48,12 @@ public class FinalTest {
             writer.println("Генератор\t\t\tмощность\tразмер выборки\tразмер выборки(бит)\tалгоритм\tзавалил тест");
             for (int i = 0; i < SELECTIONS_BITS.length; ++i) {
                 for (TestingAlgorithmType algType : TestingAlgorithmType.values()) {
+                    int counter = 0;
                     for (GenericLCG generator : GenericLCG.LCG_LIST) {
+                        ++counter;
+                        if (counter != 3)
+                            continue;
+                        
                         int selectionCount = START_SELECTION_COUNT;
                         int success = 0;
                         do {
@@ -79,8 +84,8 @@ public class FinalTest {
                             writer.print(algType.getCaption() + "\t");
                             writer.println(success + "/" + result.size());
                             
-                            selectionCount <<= 1;
-                        } while (selectionCount <= MAX_SELECTION_COUNT && success < ITERATIONS_COUNT / 2);
+                            selectionCount = (int) (selectionCount * 1.4);
+                        } while (selectionCount <= MAX_SELECTION_COUNT && success == 0);
                     }
                 }
             }

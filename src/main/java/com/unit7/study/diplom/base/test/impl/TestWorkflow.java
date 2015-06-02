@@ -56,9 +56,16 @@ public class TestWorkflow<T> implements Workflow {
                 sequence[j] = generator.next();
             }
             
-            final TestingAlgorithm<T> alg = TestingAlgorithmFactory.createAlgorithm(algorithmType, sequence, generator.bitCount());
-            alg.setHi2(0.00016); // уровень значимости 0.99
-            final boolean testResult = alg.test();
+            boolean testResult;
+            
+            try {
+                final TestingAlgorithm<T> alg = TestingAlgorithmFactory.createAlgorithm(algorithmType, sequence, generator.bitCount());
+                alg.setHi2(0.00016); // уровень значимости 0.99
+                testResult = alg.test();
+            } catch (Exception e) {
+                logger.warn("Error when test", e);
+                testResult = true;
+            }
             
             logger.debug("Iteration {}, testResult: {}", i, testResult);
             

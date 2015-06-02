@@ -28,13 +28,14 @@ public class BookStackTest extends TestingAlgorithm<BitSet> {
     
     public BookStackTest(BitSet[] sequence, short bitCount) {
         super(sequence, bitCount);
-        if (sequence == null || sequence.length == 0) {
-            throw new IllegalArgumentException("sequence length should be > 0");
+        final int requiredLength = (int) (5 * Math.sqrt(Math.pow(2, bitCount)));
+        if (sequence == null || sequence.length == 0 || sequence.length < requiredLength) {
+            throw new IllegalArgumentException("sequence length should be >= " + requiredLength);
         }
     }
 
     private void prepare() {
-        final int preparedSetLength = (int) Math.sqrt(sequence.length);
+        final int preparedSetLength = (int) Math.sqrt(Math.pow(2, bitCount));
         preparedSet = new BSSet<>(preparedSetLength);
         
         logger.debug("preparedSetLength: {}", preparedSetLength);
@@ -60,8 +61,8 @@ public class BookStackTest extends TestingAlgorithm<BitSet> {
         
         final BigDecimal setPower = BigDecimal.valueOf(2).pow(bitCount);
         
-        final double p1 = BigDecimal.valueOf(n1).divide(setPower).doubleValue();
-        final double p2 = BigDecimal.valueOf(n2).divide(setPower).doubleValue();
+        final double p1 = BigDecimal.valueOf(preparedSet.size()).divide(setPower).doubleValue();
+        final double p2 = 1 - p1; //BigDecimal.valueOf(preparedSet.size() - ).divide(setPower).doubleValue();
         
         logger.debug("Calculated first set matching and probability: [ {}, {} ], second set matching and probability: [ {}, {} ]",
                 n1, p1, n2, p2);
