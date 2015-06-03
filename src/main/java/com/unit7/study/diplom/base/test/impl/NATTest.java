@@ -55,7 +55,11 @@ public class NATTest extends TestingAlgorithm<BitSet> {
             sortedPart.add(sequence[i]);
         }
         
+        logger.debug("Sorted part created.Size: {}", sortedPart.size());
+        
         findAvgDistance();
+        
+        logger.debug("Average distance calculated: {}", currentDistance);
         
         // b0 > r
         while (!sortedPart.isEmpty() && BIT_SET_COMPARATOR.compare(sortedPart.first(), currentDistance) <= 0) {
@@ -70,8 +74,14 @@ public class NATTest extends TestingAlgorithm<BitSet> {
             sortedPart.remove(sortedPart.last());
         }
         
+        logger.debug("Border conditions executed");
+        
         // bi < 2 * r
         normalizeSortedPart();
+        
+        logger.debug("Sorted part normalized. Final params:");
+        logger.debug("Average distance: {}", currentDistance);
+        logger.debug("Sorted part size: {}", sortedPart.size());
     }
     
     /**
@@ -199,6 +209,8 @@ public class NATTest extends TestingAlgorithm<BitSet> {
             if (distance != null && BIT_SET_COMPARATOR.compare(currentDistance, distance) > 0)
                 distanceSet.add(distance);
         }
+        
+        logger.debug("Distances set size: {}", distanceSet.size());
     }
     
     private void executeStageThree() {
@@ -210,6 +222,8 @@ public class NATTest extends TestingAlgorithm<BitSet> {
                 meetFrequency += 1;
             }
         }
+        
+        logger.debug("Stage three executed. MeetFrequence: {}", meetFrequency);
     }
     
     /**
@@ -444,7 +458,7 @@ public class NATTest extends TestingAlgorithm<BitSet> {
         
         final double x2 = calcFinalValue();
         
-        logger.info("Calculated x2: {}", x2);
+        logger.info("Calculated x2: {}, against hi2: {}", x2, hi2);
         
         return x2 <= hi2;
     }
