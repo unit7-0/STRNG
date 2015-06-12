@@ -77,11 +77,62 @@ public class NATTest extends TestingAlgorithm<BitSet> {
         logger.debug("Border conditions executed");
         
         // bi < 2 * r
-        normalizeSortedPart();
+//        normalizeSortedPart();
+        sortedPart = rightNormalization();
         
         logger.debug("Sorted part normalized. Final params:");
         logger.debug("Average distance: {}", currentDistance);
         logger.debug("Sorted part size: {}", sortedPart.size());
+    }
+    
+    /**
+     * Правильная нормализация - берем только точки, расстояние между которыми > 2R
+     * @return
+     */
+    private SortedSet<BitSet> rightNormalization() {
+        final BitSet bitSetTwo = BitSet.valueOf(new long[] { 2 });
+        final BitSet distanceDoubled = mul(currentDistance, bitSetTwo);
+        
+        logger.debug("average distance: {}", new BigInteger(bitSetToString(currentDistance), 2).longValue());
+        
+        final SortedSet<BitSet> result = new TreeSet<BitSet>(BIT_SET_COMPARATOR);
+        Iterator<BitSet> it = sortedPart.iterator();
+        
+        BitSet prev = it.next();
+        
+        result.add(prev);
+        
+        while (it.hasNext()) {
+            final BitSet cur = it.next();
+            
+            final BitSet dist = sub(cur, prev);
+            
+            if (BIT_SET_COMPARATOR.compare(distanceDoubled, dist) < 0) {
+                prev = cur;
+                result.add(cur);
+            }
+        }
+        
+        if (logger.isDebugEnabled()) {
+            logger.debug("Sorted part before normalization:");
+            it = sortedPart.iterator();
+            final StringBuilder log = new StringBuilder();
+            
+            while (it.hasNext()) {
+                log.append(new BigInteger(bitSetToString(it.next()), 2).longValue()).append(" ");
+            }
+            logger.debug("{}", log.toString());
+            log.delete(0, log.length());
+            
+            logger.debug("Sorted part after normalization:");
+            it = result.iterator();
+            while (it.hasNext()) {
+                log.append(new BigInteger(bitSetToString(it.next()), 2).longValue()).append(" ");
+            }
+            logger.debug("{}", log.toString());
+        }
+        
+        return result;
     }
     
     /**
@@ -98,6 +149,7 @@ public class NATTest extends TestingAlgorithm<BitSet> {
     /**
      * Проредить выборку, сделав ее равномерной - чтобы элементы были равноудалены друг от друга
      */
+    @Deprecated
     private void normalizeSortedPart() {
         final BitSet bitSetTwo = BitSet.valueOf(new long[] { 2 });
         BitSet distanceDoubled = mul(currentDistance, bitSetTwo);
@@ -135,6 +187,7 @@ public class NATTest extends TestingAlgorithm<BitSet> {
      * @param requiredDistance требуемое среднее расстояние
      * @return новое среднее расстояние между последовательностями
      */
+    @Deprecated
     private BitSet removeSequenceWithMinDist(BitSet requiredDistance) {
         
         BitSet newDistance = currentDistance;

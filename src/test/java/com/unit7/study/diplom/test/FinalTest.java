@@ -89,7 +89,7 @@ public class FinalTest {
             logger.error("Error when testing", e);
             Assert.fail(e.getMessage());
         }
-    }
+    } 
     
     @org.junit.After
     public void tearDown() {
